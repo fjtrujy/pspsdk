@@ -1,10 +1,17 @@
 # First stage
-FROM pspdev/psptoolchain:latest
+ARG BASE_DOCKER_IMAGE
+
+FROM $BASE_DOCKER_IMAGE
 
 COPY . /src
 
 RUN apk add build-base autoconf automake zlib-dev
-RUN cd /src && ./bootstrap && ./configure && make all install clean
+RUN cd /src && \
+    ./bootstrap && \
+    ./configure && \
+    make -j $(getconf _NPROCESSORS_ONLN) clean && \
+    make -j $(getconf _NPROCESSORS_ONLN) && \
+    make -j $(getconf _NPROCESSORS_ONLN) install
 
 # Second stage
 FROM alpine:latest
