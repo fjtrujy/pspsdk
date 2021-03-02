@@ -10,25 +10,36 @@
  * Copyright (c) 2005 John Kelley <ps2dev@kelley.ca>
  *
  */
-void _pspsdk_alloc_init();
-void _pspsdk_alloc_deinit();
-void _pspsdk_stdio_init();
-void _pspsdk_stdio_deinit();
-void _pspsdk_stdlib_init();
-void _pspsdk_stdlib_deinit();
 
-__attribute__((weak, constructor))
-void _pspsdk_libc_init()
-{
-    _pspsdk_alloc_init();
-    _pspsdk_stdio_init();
-    _pspsdk_stdlib_init();
-}
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/param.h>
 
-__attribute__((weak, destructor))
-void _pspsdk_libc_deinit()
+void __init_cwd(char *argv_0);
+void __timezone_update();
+void __fdman_init();
+
+#ifdef F___psp_libc_init
+/* Note: This function is being linked into _exit.o.  
+   Because __psp_libc_init is a weak import in crt0.c, the linker
+   chooses to ignore an object file in libc.a that contains just this
+   function, since it's not necessary for successful compilation.
+   By putting it instead in _exit.o, which is already used by crt0.c,
+   the linker sees __psp_libc_init and resolves the symbol properly.
+*/
+__attribute__((weak))
+void __psp_libc_init(int argc, char *argv[])
 {
-    _pspsdk_stdlib_deinit();
-    _pspsdk_stdio_deinit();
-    _pspsdk_alloc_deinit();
+    (void) argc;
+
+	/* Initialize cwd from this program's path */
+	__init_cwd(argv[0]);
+
+	/* Initialize timezone */
+	__timezone_update();
+
+	/* Initialize filedescriptor management */
+	__fdman_init();
 }
+#endif
