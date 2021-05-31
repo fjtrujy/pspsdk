@@ -1,8 +1,6 @@
 TARGET = prxloader
 OBJS = main.o MyLib.o
 
-USE_PSPSDK_LIBC = 1
-
 INCDIR = 
 CFLAGS = -O2 -G0 -Wall
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti

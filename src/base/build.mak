@@ -59,42 +59,32 @@ else
 LDFLAGS  := $(addprefix -L,$(LIBDIR)) $(LDFLAGS)
 endif
 
-# Library selection.  By default we link with Newlib's libc.  Allow the
-# user to link with PSPSDK's libc if USE_PSPSDK_LIBC is set to 1.
-
+# Library selection. By default we link with Newlib's together with src/libc libraries.
+# Allow the user to use just kernel builtin libc using USE_KERNEL_LIBC
 ifeq ($(USE_KERNEL_LIBC),1)
 # Use the PSP's kernel libc
 PSPSDK_LIBC_LIB = 
-CFLAGS := -I$(PSPSDK)/include/libc $(CFLAGS)
 else
-ifeq ($(USE_PSPSDK_LIBC),1)
-# Use the pspsdk libc
-PSPSDK_LIBC_LIB = -lpsplibc
-CFLAGS := -I$(PSPSDK)/include/libc $(CFLAGS)
-else
-# Use newlib (urgh)
-PSPSDK_LIBC_LIB = -lc
+PSPSDK_LIBC_LIB = -lc -lpsplibc
 endif
-endif
-
 
 # Link with following default libraries.  Other libraries should be specified in the $(LIBS) variable.
 # TODO: This library list needs to be generated at configure time.
 #
 ifeq ($(USE_KERNEL_LIBS),1)
 PSPSDK_LIBS = -lpspdebug -lpspdisplay_driver -lpspctrl_driver -lpspsdk
-LIBS     := $(LIBS) $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspkernel
+LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspkernel -Wl,--end-group
 else
 ifeq ($(USE_USER_LIBS),1)
 PSPSDK_LIBS = -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
-LIBS     := $(LIBS) $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
+LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
 			-lpspnet_inet -lpspnet_apctl -lpspnet_resolver -lpsputility \
-			-lpspuser
+			-lpspuser -Wl,--end-group
 else
 PSPSDK_LIBS = -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
-LIBS     := $(LIBS) $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
+LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
 			-lpspnet_inet -lpspnet_apctl -lpspnet_resolver -lpsputility \
-			-lpspuser -lpspkernel
+			-lpspuser -lpspkernel -Wl,--end-group
 endif
 endif
 

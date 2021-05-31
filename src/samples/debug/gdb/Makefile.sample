@@ -1,8 +1,6 @@
 TARGET = gdb
 OBJS = main.o 
 
-USE_PSPSDK_LIBC = 1
-
 INCDIR = 
 CFLAGS = -O0 -G0 -Wall -ggdb
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
