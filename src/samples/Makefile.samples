@@ -53,6 +53,9 @@ SAMPLES = \
 	mp3 \
 	ms/callback \
 	nand/dumpipl \
+	net/simple \
+	net/simple_prx \
+	net/resolver \
 	net/wlanscan \
 	net/wlanscan_elf \
 	power \
@@ -76,11 +79,7 @@ SAMPLES = \
 	me/basic \
 	wlan \
 	exceptions
-
-COMENTED_SAMPLES = \
-	net/simple \
-	net/simple_prx \
-	net/resolver \
+	
 
 all:
 	for sample in $(SAMPLES) ; do \
