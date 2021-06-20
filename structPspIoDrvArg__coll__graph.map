@@ -1,0 +1,5 @@
+<map id="PspIoDrvArg" name="PspIoDrvArg">
+<area shape="rect" id="node1" title="Structure passed to the init and exit functions of the io driver system." alt="" coords="13,184,109,211"/>
+<area shape="rect" id="node2" href="$structPspIoDrv.html" title=" " alt="" coords="23,95,99,121"/>
+<area shape="rect" id="node3" href="$structPspIoDrvFuncs.html" title="Structure to maintain the file driver pointers." alt="" coords="5,5,117,32"/>
+</map>

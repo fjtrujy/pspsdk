@@ -1,0 +1,6 @@
+<map id="UsbDriver" name="UsbDriver">
+<area shape="rect" id="node1" title="USB driver structure used by sceUsbbdRegister and sceUsbbdUnregister." alt="" coords="135,95,215,121"/>
+<area shape="rect" id="node2" href="$structUsbInterface.html" title="USB driver interface." alt="" coords="5,5,103,32"/>
+<area shape="rect" id="node3" href="$structUsbEndpoint.html" title="USB driver endpoint." alt="" coords="127,5,223,32"/>
+<area shape="rect" id="node4" href="$structStringDescriptor.html" title="USB string descriptor." alt="" coords="247,5,362,32"/>
+</map>

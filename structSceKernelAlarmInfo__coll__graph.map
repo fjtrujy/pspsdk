@@ -1,0 +1,4 @@
+<map id="SceKernelAlarmInfo" name="SceKernelAlarmInfo">
+<area shape="rect" id="node1" title="Struct containing alarm info." alt="" coords="5,95,144,121"/>
+<area shape="rect" id="node2" href="$structSceKernelSysClock.html" title="64&#45;bit system clock type." alt="" coords="6,5,143,32"/>
+</map>
