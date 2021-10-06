@@ -464,6 +464,8 @@ struct dirent *readdir(DIR *dir)
 	int rv;
 	struct dirent *de;
 	SceIoDirent sceiode;
+   // NEEDED otherwise it will crash!!!
+   memset(&sceiode, 0, sizeof(SceIoDirent));
 
 	if(dir == NULL) {
 		errno = EBADF;
