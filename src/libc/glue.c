@@ -92,7 +92,7 @@ void __fill_stat(struct stat *stat, const SceIoStat *sce_stat)
 {
         stat->st_dev = 0;
         stat->st_ino = 0;
-        stat->st_mode = io_to_posix_mode(sce_stat->st_mode);
+        stat->st_mode = io_to_posix_mode(sce_stat->st_attr);
         stat->st_nlink = 0;
         stat->st_uid = 0;
         stat->st_gid = 0;
@@ -479,7 +479,7 @@ struct dirent *readdir(DIR *dir)
 	}
 
 	__fill_stat(&de->d_stat, &sceiode.d_stat);
-	strcpy(de->d_name, sceiode.d_name);
+	strncpy(de->d_name, sceiode.d_name, MAXNAMLEN);
 	de->d_name[MAXNAMLEN] = 0;
 
 	return de;
@@ -622,6 +622,13 @@ int _rename(const char *old, const char *new)
    }
 
    return __set_errno(sceIoRename(oldname, newname));
+}
+#endif
+
+#ifdef F_getcwd
+char *getcwd(char *buf, size_t len) {
+	strncpy(buf, __cwd, len);
+	return buf;
 }
 #endif
 
