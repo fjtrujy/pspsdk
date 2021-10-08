@@ -704,42 +704,7 @@ void * _sbrk(ptrdiff_t incr)
 #ifdef F__gettimeofday
 int _gettimeofday(struct timeval *tp, struct timezone *tzp)
 {
-	int ret;
-	time_t t;
-	struct timeval tv1, tv2;
-
-	/* The kernel sceKernelLibcGettimeofday only returns time
-	   since midnight.  To get a proper timeval return value, we
-	   get seconds using sceKernelLibcTime and microseconds using
-	   sceKernelLibcGettimeofday.  Since we are reading the time
-	   with two different function calls, we need to be careful 
-	   to avoid glitches when the time changes between calls. */
-
- retry:
-	/* Get seconds and microseconds since midnight */
-	ret = __set_errno(sceKernelLibcGettimeofday(&tv1, tzp));
-	if (ret < 0)
-		return ret;
-
-	/* Get seconds since epoch */
-	ret = __set_errno(sceKernelLibcTime(&t));
-	if (ret < 0)
-		return ret;
-
-	/* Get seconds and microseconds since midnight, again */
-	ret = __set_errno(sceKernelLibcGettimeofday(&tv2, tzp));
-	if (ret < 0)
-		return ret;
-
-	/* Retry if microseconds wrapped around */
-	if (tv2.tv_usec < tv1.tv_usec)
-		goto retry;
-
-	/* Return the actual time since epoch */
-	tp->tv_sec = t;
-	tp->tv_usec = tv2.tv_usec;
-
-	return 0;
+	return __set_errno(sceKernelLibcGettimeofday(tp, tzp));
 }
 #endif
 
