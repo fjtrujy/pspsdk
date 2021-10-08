@@ -65,7 +65,7 @@ ifeq ($(USE_KERNEL_LIBC),1)
 # Use the PSP's kernel libc
 PSPSDK_LIBC_LIB = 
 else
-PSPSDK_LIBC_LIB = -lc -lpsplibc
+PSPSDK_LIBC_LIB = -lc -lpsplibc -lc
 endif
 
 # Link with following default libraries.  Other libraries should be specified in the $(LIBS) variable.
