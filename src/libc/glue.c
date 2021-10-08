@@ -441,18 +441,17 @@ DIR *opendir(const char *filename)
 		return NULL;
 	}
 
-	dirp = (DIR *)malloc(sizeof(DIR));
 
 	uid = sceIoDopen(dest);
-
 	if (uid < 0)
 	{
-		free(dirp);
 		(void) __set_errno(uid);
 		return NULL;
 	}
 
+	dirp = (DIR *)malloc(sizeof(DIR));
 	dirp->dd_fd = uid;
+   dirp->dd_buf = malloc(sizeof(struct dirent));
 
 	return dirp;
 }
@@ -499,10 +498,11 @@ int closedir(DIR *dir)
 {
 	if (dir != NULL)
 	{
-		int uid;
-		uid = dir->dd_fd;
+      int ret_errno;
+      ret_errno = sceIoDclose(dir->dd_fd);
+      free(dir->dd_buf);
 		free(dir);
-		return __set_errno(sceIoDclose(uid));
+		return __set_errno(ret_errno);
 	}
 
 	errno = EBADF;
