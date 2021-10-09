@@ -59,34 +59,14 @@ else
 LDFLAGS  := $(addprefix -L,$(LIBDIR)) $(LDFLAGS)
 endif
 
-# Library selection. By default we link with Newlib's together with src/libc libraries.
-# Allow the user to use just kernel builtin libc using USE_KERNEL_LIBC
-ifeq ($(USE_KERNEL_LIBC),1)
-# Use the PSP's kernel libc
-PSPSDK_LIBC_LIB = 
-else
 PSPSDK_LIBC_LIB = -lc -lpsplibc -lc
-endif
-
 # Link with following default libraries.  Other libraries should be specified in the $(LIBS) variable.
 # TODO: This library list needs to be generated at configure time.
 #
-ifeq ($(USE_KERNEL_LIBS),1)
-PSPSDK_LIBS = -lpspdebug -lpspdisplay_driver -lpspctrl_driver -lpspsdk
-LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspkernel -Wl,--end-group
-else
-ifeq ($(USE_USER_LIBS),1)
-PSPSDK_LIBS = -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
-LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
-			-lpspnet_inet -lpspnet_apctl -lpspnet_resolver -lpsputility \
-			-lpspuser -Wl,--end-group
-else
 PSPSDK_LIBS = -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
 LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
 			-lpspnet_inet -lpspnet_apctl -lpspnet_resolver -lpsputility \
 			-lpspuser -lpspkernel -Wl,--end-group
-endif
-endif
 
 # Define the overridable parameters for EBOOT.PBP
 ifndef PSP_EBOOT_TITLE

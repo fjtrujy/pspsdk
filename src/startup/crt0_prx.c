@@ -44,7 +44,6 @@ extern SceModuleInfo module_info __attribute__((weak));
 extern void __psp_libc_init(int argc, char *argv[]);
 extern void _init(void);
 extern void _fini(void);
-
 extern int main(int argc, char *argv[]);
 
 /**
