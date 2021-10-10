@@ -688,7 +688,7 @@ void * _sbrk(ptrdiff_t incr)
 		}
 
 		if (heap_size != 0) {
-			__psp_heap_blockid = sceKernelAllocPartitionMemory(2, "block", PSP_SMEM_Low, heap_size, NULL);
+			__psp_heap_blockid = sceKernelAllocPartitionMemory(PSP_MEMORY_PARTITION_USER, "newlib_block", PSP_SMEM_Low, heap_size, NULL);
 			if (__psp_heap_blockid > 0) {
 				heap_bottom = sceKernelGetBlockHeadAddr(__psp_heap_blockid);
 				heap_ptr = heap_bottom;
