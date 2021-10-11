@@ -684,7 +684,7 @@ void * _sbrk(ptrdiff_t incr)
 
 		heap_size *= 1024;
 		if ((int)heap_size < 0) {
-			heap_size += sceKernelMaxFreeMemSize();
+			heap_size = sceKernelMaxFreeMemSize();
 		}
 
 		if (heap_size != 0) {
