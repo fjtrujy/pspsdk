@@ -49,6 +49,10 @@ extern int __pspsdk_is_prx __attribute__((weak));
 extern char __cwd[MAXNAMLEN + 1];
 int __path_absolute(const char *in, char *out, int len);
 
+/* Functions from mutexman.c */
+extern SceLwMutexWorkarea __malloc_mutex;
+extern SceLwMutexWorkarea __sbrk_mutex;
+
 /* Fuctions from errno.c */
 int __set_errno(int code);
 
@@ -671,6 +675,8 @@ void * _sbrk(ptrdiff_t incr)
 	static void * heap_top = NULL;
 	static void * heap_ptr = NULL;
 
+	sceKernelLockLwMutex(&__sbrk_mutex, 1, 0);
+
 	/* Has our heap been initialized? */
 	if (heap_bottom == NULL) {
 		/* No, initialize the heap. */
@@ -704,6 +710,8 @@ void * _sbrk(ptrdiff_t incr)
 		heap_ptr = next_heap_ptr;
 	}
 
+	sceKernelUnlockLwMutex(&__sbrk_mutex, 1);
+
 	return heap_addr;
 }
 #endif
@@ -731,15 +739,16 @@ clock_t _times(struct tms *buffer)
 }
 #endif
 
-#ifdef F__platformDisableInterrupts
-unsigned int _platformDisableInterrupts(void) {
-	return pspSdkDisableInterrupts();
+#ifdef F__internal_malloc_lock
+void _internal_malloc_lock(struct _reent *ptr)
+{
+	sceKernelLockLwMutex(&__malloc_mutex, 1, 0);
 }
 #endif
 
-#ifdef F__platformEnableInterrupts
-void _platformEnableInterrupts(unsigned int istate) 
+#ifdef F__internal_malloc_unlock
+void _internal_malloc_unlock(struct _reent *ptr)
 {
-	return pspSdkEnableInterrupts(istate);
+	sceKernelUnlockLwMutex(&__malloc_mutex, 1);
 }
 #endif

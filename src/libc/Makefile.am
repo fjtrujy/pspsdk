@@ -25,9 +25,11 @@ FDMAN_OBJS = __descriptor_data_pool.o __descriptormap.o __fdman_init.o __fdman_g
 
 GLUE_OBJS = __fill_stat.o __psp_heap_blockid.o __psp_free_heap.o _fork.o _wait.o _open.o _close.o _read.o _write.o _fstat.o \
 	_stat.o access.o _fcntl.o opendir.o readdir.o rewinddir.o closedir.o _lseek.o chdir.o mkdir.o rmdir.o _link.o _unlink.o \
-	_rename.o getcwd.o _getpid.o _kill.o _sbrk.o _gettimeofday.o _times.o _platformDisableInterrupts.o _platformEnableInterrupts.o
+	_rename.o getcwd.o _getpid.o _kill.o _sbrk.o _gettimeofday.o _times.o _internal_malloc_lock.o _internal_malloc_unlock.o
 
 INIT_OBJS = __psp_libc_init.o
+
+MUTEXMAN_OBJS = __malloc_mutex.o __sbrk_mutex.o __fdman_mutex.o __init_mutex.o
 
 NETDB_OBJS = h_errno.o gethostbyaddr.o gethostbyname.o
 
@@ -73,8 +75,8 @@ libpsplibc_a_SOURCES = \
 	terminate.c \
 	timezone.c
 
-libpsplibc_a_LIBADD  = $(CWD_OBJS) $(ERRNO_OBJS) $(FDMAN_OBJS) $(INIT_OBJS) $(GLUE_OBJS) $(NETDB_OBJS) $(PIPE_OBJS) $(SELECT_OBJS) \
-	$(SOCKET_OBJS) $(SLEEP_OBJS) $(TERMINATE_OBJS) $(TIMEZONE_OBJS)
+libpsplibc_a_LIBADD  = $(CWD_OBJS) $(ERRNO_OBJS) $(FDMAN_OBJS) $(INIT_OBJS) $(GLUE_OBJS) $(MUTEXMAN_OBJS) $(NETDB_OBJS) $(PIPE_OBJS) \
+	$(SELECT_OBJS) $(SOCKET_OBJS) $(SLEEP_OBJS) $(TERMINATE_OBJS) $(TIMEZONE_OBJS)
 
 $(CWD_OBJS): cwd.c
 	$(AM_V_CC)$(COMPILE) -DF_$* $< -c -o $@
@@ -89,6 +91,9 @@ $(INIT_OBJS): init.c
 	$(AM_V_CC)$(COMPILE) -DF_$* $< -c -o $@
 
 $(GLUE_OBJS): glue.c
+	$(AM_V_CC)$(COMPILE) -DF_$* $< -c -o $@
+
+$(MUTEXMAN_OBJS): mutexman.c
 	$(AM_V_CC)$(COMPILE) -DF_$* $< -c -o $@
 
 $(NETDB_OBJS): netdb.c
