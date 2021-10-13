@@ -40,9 +40,11 @@
 #include "fdman.h"
 
 #define DEFAULT_PRX_HEAP_SIZE_KB 64
+#define DEFAULT_HEAP_THRESHOLD_SIZE_KB 512
 
 /* If defined it specifies the desired size of the heap, in KB. */
 extern unsigned int sce_newlib_heap_kb_size __attribute__((weak));
+extern unsigned int sce_newlib_heap_threshold_kb_size __attribute__((weak));
 extern int __pspsdk_is_prx __attribute__((weak));
 
 /* Functions from cwd.c */
@@ -669,6 +671,7 @@ pid_t _wait(int *unused)
 #endif
 
 #ifdef F__sbrk
+#define TO_KB(value) (value * 1024)
 void * _sbrk(ptrdiff_t incr)
 {
 	static void * heap_bottom = NULL;
@@ -683,18 +686,21 @@ void * _sbrk(ptrdiff_t incr)
 		SceSize heap_size = (SceSize) -1;
 
 		if (&sce_newlib_heap_kb_size != NULL) {
-			heap_size = sce_newlib_heap_kb_size;
+			heap_size = TO_KB(sce_newlib_heap_kb_size);
 		} else if(&__pspsdk_is_prx != NULL) {
-			heap_size = DEFAULT_PRX_HEAP_SIZE_KB;
+			heap_size = TO_KB(DEFAULT_PRX_HEAP_SIZE_KB);
 		}
 
-		heap_size *= 1024;
 		if ((int)heap_size < 0) {
 			heap_size = sceKernelMaxFreeMemSize();
+			if(&sce_newlib_heap_threshold_kb_size != NULL)
+				heap_size -= TO_KB(sce_newlib_heap_threshold_kb_size);
+			else
+				heap_size -= TO_KB(DEFAULT_HEAP_THRESHOLD_SIZE_KB);
 		}
 
 		if (heap_size != 0) {
-			__psp_heap_blockid = sceKernelAllocPartitionMemory(PSP_MEMORY_PARTITION_USER, "newlib_block", PSP_SMEM_Low, heap_size, NULL);
+			__psp_heap_blockid = sceKernelAllocPartitionMemory(PSP_MEMORY_PARTITION_USER, "heap_block", PSP_SMEM_Low, heap_size, NULL);
 			if (__psp_heap_blockid > 0) {
 				heap_bottom = sceKernelGetBlockHeadAddr(__psp_heap_blockid);
 				heap_ptr = heap_bottom;
