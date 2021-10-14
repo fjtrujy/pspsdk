@@ -22,12 +22,10 @@ void __fdman_init();
 void __init_mutex();
 
 #ifdef F___psp_libc_init
-/* Note: This function is being linked into _exit.o.  
-   Because __psp_libc_init is a weak import in crt0.c, the linker
-   chooses to ignore an object file in libc.a that contains just this
-   function, since it's not necessary for successful compilation.
-   By putting it instead in _exit.o, which is already used by crt0.c,
-   the linker sees __psp_libc_init and resolves the symbol properly.
+/* Note: This function is being called from crt0.c/crt0_prx.c.
+* It is a weak function because can be override by user program, 
+* saving a lot of space in your binary, however you will loose
+  all the basic libc operation
 */
 __attribute__((weak))
 void __psp_libc_init(int argc, char *argv[])

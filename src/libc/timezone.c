@@ -16,6 +16,7 @@
 #include <stdlib.h>
 
 #ifdef F___timezone_update
+__attribute__((weak))
 void __timezone_update()
 {
     /* Initialize timezone from PSP configuration */
