@@ -59,6 +59,9 @@ else
 LDFLAGS  := $(addprefix -L,$(LIBDIR)) $(LDFLAGS)
 endif
 
+# Reduce binary size
+LDFLAGS +=  -Wl,-zmax-page-size=128
+
 PSPSDK_LIBC_LIB = -lc -lpsplibc -lc
 # Link with following default libraries.  Other libraries should be specified in the $(LIBS) variable.
 # TODO: This library list needs to be generated at configure time.
