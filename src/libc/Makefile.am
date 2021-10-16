@@ -25,7 +25,9 @@ FDMAN_OBJS = __descriptor_data_pool.o __descriptormap.o __fdman_init.o __fdman_g
 
 GLUE_OBJS = __fill_stat.o __psp_heap_blockid.o __psp_free_heap.o _fork.o _wait.o _open.o _close.o _read.o _write.o _fstat.o \
 	_stat.o access.o _fcntl.o opendir.o readdir.o rewinddir.o closedir.o _lseek.o chdir.o mkdir.o rmdir.o _link.o _unlink.o \
-	_rename.o getcwd.o _getpid.o _kill.o _sbrk.o _gettimeofday.o _times.o _internal_malloc_lock.o _internal_malloc_unlock.o
+	_rename.o getcwd.o _getpid.o _kill.o _sbrk.o _gettimeofday.o _times.o _internal_malloc_lock.o _internal_malloc_unlock.o \
+	symlink.o truncate.o chmod.o fchmod.o fchmodat.o pathconf.o readlink.o
+
 
 INIT_OBJS = __psp_libc_init.o
 
