@@ -36,13 +36,6 @@ endif
 
 CFLAGS += -D_PSP_FW_VERSION=$(PSP_FW_VERSION)
 
-PSPSDK_LIBC_LIB = -lc -lpsplibc -lc
-
-# Link with following default libraries.  Other libraries should be specified in the $(LIBS) variable.
-# TODO: This library list needs to be generated at configure time.
-PSPSDK_LIBS = -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
-LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpsputility -lpspuser -lpspkernel -Wl,--end-group
-
 FINAL_TARGET = $(TARGET).prx
 
 all: $(FINAL_TARGET)

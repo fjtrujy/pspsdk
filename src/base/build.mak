@@ -62,15 +62,6 @@ endif
 # Reduce binary size
 LDFLAGS +=  -Wl,-zmax-page-size=128
 
-PSPSDK_LIBC_LIB = -lc -lpsplibc -lc
-# Link with following default libraries.  Other libraries should be specified in the $(LIBS) variable.
-# TODO: This library list needs to be generated at configure time.
-#
-PSPSDK_LIBS = -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
-LIBS     := $(LIBS) -Wl,--start-group $(PSPSDK_LIBS) $(PSPSDK_LIBC_LIB) -lpspnet \
-			-lpspnet_inet -lpspnet_apctl -lpspnet_resolver -lpsputility \
-			-lpspuser -lpspkernel -Wl,--end-group
-
 # Define the overridable parameters for EBOOT.PBP
 ifndef PSP_EBOOT_TITLE
 PSP_EBOOT_TITLE = $(TARGET)
