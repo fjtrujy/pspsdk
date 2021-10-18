@@ -30,6 +30,8 @@ ASFLAGS  := $(CFLAGS) $(ASFLAGS)
 
 LDFLAGS  := $(addprefix -L,$(LIBDIR)) -Wl,-q,-T$(PSPSDK)/lib/linkfile.prx -nostartfiles -Wl,-zmax-page-size=128 $(LDFLAGS)
 
+LIBS := $(LIBS) -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk
+
 ifeq ($(PSP_FW_VERSION),)
 PSP_FW_VERSION=150
 endif

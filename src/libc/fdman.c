@@ -71,7 +71,6 @@ void __fdman_init()
 int __fdman_get_new_descriptor()
 {
 	int i = 0;
-	int inten;
 
 	sceKernelLockLwMutex(&__fdman_mutex, 1, 0); /* lock here to make thread safe */
 	for (i = 0; i < __FILENO_MAX; i++) {
@@ -94,23 +93,22 @@ int __fdman_get_new_descriptor()
 int __fdman_get_dup_descriptor(int fd)
 {
 	int i = 0;
-	int inten;
 	
 	if (!__IS_FD_VALID(fd)) {
 		errno = EBADF;
 		return -1;
 	}
 
-	inten = pspSdkDisableInterrupts(); /* lock here to make thread safe */
+	sceKernelLockLwMutex(&__fdman_mutex, 1, 0); /* lock here to make thread safe */
 	for (i = 0; i < __FILENO_MAX; i++) {
 		if (__descriptormap[i] == NULL) {
 			__descriptormap[i] = &__descriptor_data_pool[fd];
 			__descriptormap[i]->ref_count++;
-			pspSdkEnableInterrupts(inten); /* release lock */
+			sceKernelUnlockLwMutex(&__fdman_mutex, 1);; /* release lock */
 			return i;
 		}
 	}
-	pspSdkEnableInterrupts(inten); /* release lock */
+	sceKernelUnlockLwMutex(&__fdman_mutex, 1);; /* release lock */
 	
 	errno = ENOMEM;
 	return -1;
