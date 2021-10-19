@@ -10,7 +10,7 @@ BUILD_PRX = 1
 
 LIBDIR =
 LDFLAGS =
-LIBS = -lpspgu -lpsputility
+LIBS = -lpspgu
 
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = PSP OSK Sample

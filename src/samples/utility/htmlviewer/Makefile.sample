@@ -11,7 +11,7 @@ EXTRA_TARGETS = EBOOT.PBP
 
 LIBDIR =
 LDFLAGS = 
-LIBS = -lpsputility -lpsphttp -lpspssl -lpspgum -lpspgu -lm 
+LIBS = -lpsphttp -lpspssl -lpspgum -lpspgu
 
 PSPSDK=$(shell psp-config --pspsdk-path)
 include $(PSPSDK)/lib/build.mak
