@@ -62,8 +62,12 @@ endif
 # Reduce binary size
 LDFLAGS +=  -Wl,-zmax-page-size=128
 
-LIBS := $(LIBS) -lpspdebug -lpsphprm_driver -lpspdisplay -lpspge -lpspctrl -lpspsdk \
+ifeq ($(USE_KERNEL_LIBS),1)
+LIBS := -nostdlib $(LIBS) lpspdebug -lpspdisplay_driver -lpspctrl_driver -lpspsdk -lpspkernel
+else
+LIBS := $(LIBS) -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspsdk \
 		-lpspnet -lpspnet_apctl
+endif
 
 # Define the overridable parameters for EBOOT.PBP
 ifndef PSP_EBOOT_TITLE
