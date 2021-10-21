@@ -45,7 +45,7 @@ jobs:
         push: true
         tags: ghcr.io/${{ github.repository }}:${{ env.DOCKER_TAG }}
         build-args: |
-          BASE_DOCKER_IMAGE=${{ github.repository_owner }}/psptoolchain:${{ env.DOCKER_TAG }}
+          BASE_DOCKER_IMAGE=fjtrujy/psptoolchain:${{ env.DOCKER_TAG }}
     
     - name: Send Compile action
       run: |
