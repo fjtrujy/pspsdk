@@ -2,7 +2,7 @@ TARGET = gdb
 OBJS = main.o 
 
 INCDIR = 
-CFLAGS = -O0 -G0 -Wall -ggdb
+CFLAGS = -O0 -Wall -ggdb
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 

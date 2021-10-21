@@ -4,7 +4,7 @@ OBJS = main.o
 PSP_FW_VERSION = 200
 BUILD_PRX = 1
 
-CFLAGS = -O2 -G0 -Wall
+CFLAGS = -O2 -Wall
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 
