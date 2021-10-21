@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: fjtrujy/psptoolchain:latest
+    container: ghcr.io/fjtrujy/psptoolchain:latest
     steps:
     - uses: actions/checkout@v2
 
