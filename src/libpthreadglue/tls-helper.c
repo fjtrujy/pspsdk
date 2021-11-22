@@ -41,7 +41,7 @@ extern pte_osMutexHandle __globalTlsLock;
 /* Structure used to emulate TLS on non-POSIX threads.  
  * This limits us to one non-POSIX thread that can
  * call pthread functions. */
-#ifdef __globalTls
+#ifdef F___globalTls
 void *__globalTls;
 #else
 extern void *__globalTls;
@@ -220,7 +220,7 @@ pte_osResult pte_osTlsSetValue(unsigned int key, void * value)
 }
 #endif
 
-#ifdef pte_osTlsGetValue
+#ifdef F_pte_osTlsGetValue
 void * pte_osTlsGetValue(unsigned int index)
 {
   void *pTls;
@@ -242,7 +242,7 @@ pte_osResult pte_osTlsAlloc(unsigned int *pKey)
 }
 #endif
 
-#ifdef pte_osTlsFree
+#ifdef F_pte_osTlsFree
 pte_osResult pte_osTlsFree(unsigned int index)
 {
   return pteTlsFree(index);

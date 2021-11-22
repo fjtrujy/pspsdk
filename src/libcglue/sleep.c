@@ -10,11 +10,15 @@
  */
 
 #include <stdio.h>
+#include <stdio.h>
 #include <time.h>
 #include <unistd.h>
 #include <errno.h>
 
 #include <pspthreadman.h>
+
+/* Fuctions from errno.c */
+int __set_errno(int code);
 
 /* Fuctions from errno.c */
 int __set_errno(int code);

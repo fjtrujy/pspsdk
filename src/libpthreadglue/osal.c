@@ -284,7 +284,7 @@ FAIL0:
 #ifdef F_pte_osThreadStart
 pte_osResult pte_osThreadStart(pte_osThreadHandle osThreadHandle)
 {
-  sceKernelStartThread(osThreadHandle, 0, NULL);
+  sceKernelStartThread(osThreadHandle, 0, 0);
 
   return PTE_OS_OK;
 }
@@ -483,6 +483,13 @@ int pte_osThreadGetDefaultPriority()
 }
 #endif
 
+#ifdef F_pthread_num_processors_np
+int pthread_num_processors_np(void)
+{
+  return 1;
+}
+#endif
+
 /****************************************************************************
  *
  * Mutexes
@@ -583,7 +590,7 @@ pte_osResult pte_osSemaphoreCreate(int initialValue, pte_osSemaphoreHandle *pHan
 }
 #endif
 
-#ifdef S_pte_osSemaphoreDelete
+#ifdef F_pte_osSemaphoreDelete
 pte_osResult pte_osSemaphoreDelete(pte_osSemaphoreHandle handle)
 {
   sceKernelDeleteSema(handle);
@@ -779,9 +786,3 @@ int pte_osAtomicIncrement(int *pdest)
   return val;
 }
 #endif
-
-/****************************************************************************
- *
- * Thread Local Storage
- *
- ***************************************************************************/
