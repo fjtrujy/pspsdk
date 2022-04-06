@@ -1,0 +1,9 @@
+<map id="ScePspUnion128" name="ScePspUnion128">
+<area shape="rect" id="node1" title=" " alt="" coords="327,95,450,121"/>
+<area shape="rect" id="node2" href="$structScePspFRect.html" title=" " alt="" coords="5,5,108,32"/>
+<area shape="rect" id="node3" href="$structScePspIRect.html" title=" " alt="" coords="133,5,231,32"/>
+<area shape="rect" id="node4" href="$structScePspFVector4.html" title=" " alt="" coords="256,5,377,32"/>
+<area shape="rect" id="node5" href="$structScePspIVector4.html" title=" " alt="" coords="402,5,519,32"/>
+<area shape="rect" id="node6" href="$structScePspFQuaternion.html" title=" " alt="" coords="543,5,682,32"/>
+<area shape="rect" id="node7" href="$structScePspFColor.html" title=" " alt="" coords="706,5,813,32"/>
+</map>

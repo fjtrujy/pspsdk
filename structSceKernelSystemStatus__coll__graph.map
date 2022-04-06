@@ -1,0 +1,4 @@
+<map id="SceKernelSystemStatus" name="SceKernelSystemStatus">
+<area shape="rect" id="node1" title="Structure to contain the system status returned by sceKernelReferSystemStatus." alt="" coords="5,95,169,121"/>
+<area shape="rect" id="node2" href="$structSceKernelSysClock.html" title="64&#45;bit system clock type." alt="" coords="19,5,156,32"/>
+</map>

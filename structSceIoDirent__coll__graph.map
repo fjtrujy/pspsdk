@@ -1,0 +1,5 @@
+<map id="SceIoDirent" name="SceIoDirent">
+<area shape="rect" id="node1" title="Describes a single directory entry." alt="" coords="22,213,113,240"/>
+<area shape="rect" id="node2" href="$structSceIoStat.html" title="Structure to hold the status information about a file." alt="" coords="27,124,107,151"/>
+<area shape="rect" id="node3" href="$structScePspDateTime.html" title=" " alt="" coords="5,5,129,32"/>
+</map>

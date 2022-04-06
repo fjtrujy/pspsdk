@@ -1,0 +1,4 @@
+<map id="SceKernelThreadInfo" name="SceKernelThreadInfo">
+<area shape="rect" id="node1" title="Structure to hold the status information for a thread." alt="" coords="5,95,149,121"/>
+<area shape="rect" id="node2" href="$structSceKernelSysClock.html" title="64&#45;bit system clock type." alt="" coords="9,5,146,32"/>
+</map>

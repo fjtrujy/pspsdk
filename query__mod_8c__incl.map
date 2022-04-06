@@ -1,0 +1,14 @@
+<map id="sdk/query_mod.c" name="sdk/query_mod.c">
+<area shape="rect" id="node1" title=" " alt="" coords="167,5,287,32"/>
+<area shape="rect" id="node2" href="$pspkerneltypes_8h.html" title=" " alt="" coords="205,229,324,256"/>
+<area shape="rect" id="node5" href="$psploadcore_8h.html" title=" " alt="" coords="28,155,130,181"/>
+<area shape="rect" id="node6" href="$pspmodulemgr_8h.html" title=" " alt="" coords="206,155,323,181"/>
+<area shape="rect" id="node7" href="$pspmodulemgr__kernel_8h.html" title=" " alt="" coords="89,80,248,107"/>
+<area shape="rect" id="node8" href="$pspsdk_8h.html" title=" " alt="" coords="323,80,398,107"/>
+<area shape="rect" id="node12" title=" " alt="" coords="422,80,486,107"/>
+<area shape="rect" id="node3" href="$psptypes_8h.html" title=" " alt="" coords="338,304,422,331"/>
+<area shape="rect" id="node4" title=" " alt="" coords="348,379,412,405"/>
+<area shape="rect" id="node9" href="$pspmoduleinfo_8h.html" title=" " alt="" coords="472,304,588,331"/>
+<area shape="rect" id="node10" href="$pspthreadman_8h.html" title=" " alt="" coords="398,155,512,181"/>
+<area shape="rect" id="node11" href="$pspdebug_8h.html" title=" " alt="" coords="418,229,506,256"/>
+</map>
