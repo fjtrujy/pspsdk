@@ -11,8 +11,9 @@
 #include <pspkernel.h>
 #include <pspge.h>
 #include <pspdisplay.h>
+#include <stdio.h>
 
-unsigned int __attribute__((aligned(16))) ge_init_list[] =
+static unsigned int __attribute__((aligned(16))) ge_init_list[] =
 {
 	0x01000000, 0x02000000, 0x10000000, 0x12000000, 0x13000000, 0x15000000, 0x16000000, 0x17000000,
 	0x18000000, 0x19000000, 0x1a000000, 0x1b000000, 0x1c000000, 0x1d000000, 0x1e000000, 0x1f000000,

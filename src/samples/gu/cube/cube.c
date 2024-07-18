@@ -91,13 +91,19 @@ int main(int argc, char* argv[])
 {
 	setupCallbacks();
 
+	printf("Starting Cube sample\n");
+
 	// setup GU
 
 	void* fbp0 = guGetStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_8888);
 	void* fbp1 = guGetStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_8888);
 	void* zbp = guGetStaticVramBuffer(BUF_WIDTH,SCR_HEIGHT,GU_PSM_4444);
 
+	printf("Allocated framebuffers at 0x%08x and 0x%08x\n",(unsigned int)fbp0,(unsigned int)fbp1);
+
 	sceGuInit();
+
+	printf("GU initialized\n");
 
 	sceGuStart(GU_DIRECT,list);
 	sceGuDrawBuffer(GU_PSM_8888,fbp0,BUF_WIDTH);
@@ -121,6 +127,7 @@ int main(int argc, char* argv[])
 	sceDisplayWaitVblankStart();
 	sceGuDisplay(GU_TRUE);
 
+	printf("Cube sample GU setup done\n");
 	// run sample
 
 	int val = 0;
@@ -175,10 +182,15 @@ int main(int argc, char* argv[])
 		sceGuSwapBuffers();
 
 		val++;
+
+		if (val == 1000) break;
 	}
 
+	printf("Cube sample done\n");
 	sceGuTerm();
 
-	sceKernelExitGame();
+	printf("GU terminated\n");
+	printf("Exiting!!!\n");
+
 	return 0;
 }
