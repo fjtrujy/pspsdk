@@ -2,12 +2,12 @@ TARGET = cube
 OBJS = cube.o logo.o ../common/callbacks.o
 
 INCDIR =
-CFLAGS = -Wall
+CFLAGS = -Wall -g -pg
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 
 LIBDIR =
-LDFLAGS =
+LDFLAGS = -g -pg
 LIBS= -lpspgum -lpspgu
 
 EXTRA_TARGETS = EBOOT.PBP
