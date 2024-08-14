@@ -16,22 +16,35 @@ void sceGuStart(int cid, void *list)
 	GuContext *context = &gu_contexts[cid];
 	unsigned int *local_list = (unsigned int *)(((unsigned int)list) | 0x40000000);
 
-	// setup display list
+	// list from previous frame
+	GuDisplayList *prev_list = gu_list;
 
-	context->list.start = local_list;
-	context->list.current = local_list;
-	context->list.parent_context = gu_curr_context;
-	gu_list = &context->list;
+	if (prev_list)
+	{
+		if (!cid) {
+			ge_list_executed[0] = sceGeListEnQueue(prev_list->start, prev_list->current, gu_settings.ge_callback_id, 0);
+			gu_settings.signal_offset = 0;
+		}
 
-	// store current context
+		if (prev_list->start != local_list) {
+			context->list.start = local_list;
+			context->list.current = local_list;
+			context->list.parent_context = gu_curr_context;
+			gu_list = &context->list;
+		} else {
+			context->list.start = local_list + 8*1024;
+			context->list.current = local_list + 8*1024;
+			context->list.parent_context = gu_curr_context;
+			gu_list = &context->list;
+		}
+	} else {
+		context->list.start = local_list;
+		context->list.current = local_list;
+		context->list.parent_context = gu_curr_context;
+		gu_list = &context->list;
+	}
 
 	gu_curr_context = cid;
-
-	if (!cid)
-	{
-		ge_list_executed[0] = sceGeListEnQueue(local_list, local_list, gu_settings.ge_callback_id, 0);
-		gu_settings.signal_offset = 0;
-	}
 
 	if (!gu_init)
 	{

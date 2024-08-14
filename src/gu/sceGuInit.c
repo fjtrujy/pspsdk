@@ -289,8 +289,12 @@ static inline void resetValues()
 	gu_settings.fin = 0;
 }
 
+SceInt64 sceKernelGetSystemTimeWide(void);
+int printf(const char *restrict format, ...);
+
 static inline void callbackSig(int id, void* arg)
 {
+	// printf("callbackSig tick count: %llu\n", sceKernelGetSystemTimeWide());
 	GuSettings* settings = (GuSettings*)arg;
 
 	settings->signal_history[(settings->signal_offset++) & 15] = id & 0xffff;
@@ -303,6 +307,7 @@ static inline void callbackSig(int id, void* arg)
 
 static inline void callbackFin(int id, void* arg)
 {
+	// printf("callbackFin tick count: %llu\n", sceKernelGetSystemTimeWide());
 	GuSettings* settings = (GuSettings*)arg;
 	if (settings->fin)
 		settings->fin(id & 0xffff);

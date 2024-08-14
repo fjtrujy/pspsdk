@@ -2195,8 +2195,8 @@ static inline void sendCommandiStall(GECommand cmd, int argument)
 {
 	sceGuSendCommandi(cmd, argument);
 
-	if (!gu_object_stack_depth && !gu_curr_context)
-		sceGeListUpdateStallAddr(ge_list_executed[0], gu_list->current);
+	// if (!gu_object_stack_depth && !gu_curr_context)
+	// 	sceGeListUpdateStallAddr(ge_list_executed[0], gu_list->current);
 }
 
 static inline void sceGuDepthBuffer(void *zbp, int zbw)
