@@ -34,6 +34,7 @@ AC_C_CONST
 AC_C_BIGENDIAN
 
 AC_ARG_WITH(pthread,  [ --with-pthread  build with pthread support], [], [with_pthread=yes])
+AC_ARG_WITH(lto,  [ --with-lto  build with lto support], [], [with_lto=yes])
 
 # Checks for library functions.
 AC_FUNC_MEMCMP
@@ -73,6 +74,11 @@ AC_SUBST(PSPSDK_LIBDIR)
 
 # CFLAGS and CXXFLAGS used to build pspsdk libraries.
 PSPSDK_CFLAGS="$CFLAGS -mno-gpopt -Wall -Werror -D_PSP_FW_VERSION=600"
+# These flags will generate LTO and non-LTO code in the same object file,
+# allowing the choice of using LTO or not in the final linked binary.
+if test "$with_lto" = yes ; then
+    PSPSDK_CFLAGS="$PSPSDK_CFLAGS -flto -ffat-lto-objects"
+fi
 PSPSDK_CXXFLAGS="$PSPSDK_CFLAGS -fno-exceptions -fno-rtti"
 if test "$with_pthread" = no ; then
 	PSPSDK_CFLAGS="$PSPSDK_CFLAGS -DPSP_WITHOUT_PTHREAD"

@@ -3,11 +3,11 @@ OBJS = speed.o ../common/callbacks.o
 
 INCDIR =
 CFLAGS = -Wall -O2
-CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti -flto
 ASFLAGS = $(CFLAGS)
 
 LIBDIR =
-LDFLAGS =
+LDFLAGS = -flto
 LIBS= -lpspgum -lpspgu
 
 EXTRA_TARGETS = EBOOT.PBP
