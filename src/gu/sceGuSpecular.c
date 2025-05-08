@@ -10,5 +10,5 @@
 
 void sceGuSpecular(float power) // specular power
 {
-	sendCommandf(MATERIAL_SPECULAR_COEF, power);
+	sceGupSpecular(__guSettings.context, power);
 }

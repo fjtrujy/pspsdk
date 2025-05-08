@@ -10,5 +10,5 @@
 
 void sceGuFrontFace(int order)
 {
-	sendCommandi(CULL, order ? 0 : 1);
+	sceGupFrontFace(__guSettings.context, order);
 }

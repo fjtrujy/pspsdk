@@ -11,28 +11,25 @@
 #include <pspkernel.h>
 #include <pspge.h>
 
-int sceGuSendList(int mode, const void *list, PspGeContext *context)
+int sceGuSendList(int mode, const void *list, PspGeContext *context, int numStacks, SceGeStack *stacks)
 {
 	PspGeListArgs args;
 	int list_id;
-	int callback;
 
+	__intrParam.count = 0;
 	args.size = sizeof(PspGeListArgs);
 	args.context = context;
-	args.numStacks = 0;
-	args.stacks = NULL;
-
-	callback = gu_settings.ge_callback_id;
-	gu_settings.signal_offset = 0;
+	args.numStacks = numStacks;
+	args.stacks = stacks;
 	list_id = -1;
 
 	switch (mode)
 	{
 	case GU_HEAD:
-		list_id = sceGeListEnQueueHead(list, NULL, callback, &args);
+		list_id = sceGeListEnQueueHead(list, NULL, __guSettings.intrId, &args);
 		break;
 	case GU_TAIL:
-		list_id = sceGeListEnQueue(list, NULL, callback, &args);
+		list_id = sceGeListEnQueue(list, NULL, __guSettings.intrId, &args);
 		break;
 	}
 
@@ -41,6 +38,6 @@ int sceGuSendList(int mode, const void *list, PspGeContext *context)
 		return list_id;
 	}
 
-	ge_list_executed[1] = list_id;
+	__guSettings.queid[1] = list_id;
 	return 0;
 }

@@ -10,6 +10,5 @@
 
 void sceGuPixelMask(unsigned int mask)
 {
-	sendCommandi(MASK_COLOR, mask);
-	sendCommandi(MASK_ALPHA, mask >> 24);
+	sceGupPixelMask(__guSettings.context, mask);
 }

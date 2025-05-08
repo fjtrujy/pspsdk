@@ -10,8 +10,5 @@
 
 void sceGuTexProjMapMode(int mode)
 {
-	GuContext *context = &gu_contexts[gu_curr_context];
-
-	context->texture_proj_map_mode = ((mode & 0x03) << 8);
-	sendCommandi(TEX_MAP_MODE, ((mode & 0x03) << 8) | context->texture_map_mode);
+	sceGupTexProjMapMode(__guSettings.context, mode);
 }

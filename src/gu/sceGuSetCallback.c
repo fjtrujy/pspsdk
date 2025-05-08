@@ -15,12 +15,12 @@ void *sceGuSetCallback(int signal, GuCallback callback)
 	switch (signal)
 	{
 	case GU_CALLBACK_SIGNAL:
-		old_callback = gu_settings.sig;
-		gu_settings.sig = callback;
+		old_callback = __intrParam.cbSignal;
+		__intrParam.cbSignal = callback;
 		break;
 	case GU_CALLBACK_FINISH:
-		old_callback = gu_settings.fin;
-		gu_settings.fin = callback;
+		old_callback = __intrParam.cbFinish;
+		__intrParam.cbFinish = callback;
 		break;
 	}
 

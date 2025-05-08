@@ -10,5 +10,5 @@
 
 void sceGuTexFilter(int min, int mag)
 {
-	sendCommandi(TEX_FILTER, (mag << 8) | min);
+	sceGupTexFilter(__guSettings.context, mag, min);
 }

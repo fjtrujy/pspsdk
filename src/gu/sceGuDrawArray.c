@@ -10,21 +10,6 @@
 
 void sceGuDrawArray(int prim, int vtype, int count, const void *indices, const void *vertices)
 {
-  if (vtype)
-    sendCommandi(VERTEX_TYPE, vtype);
-
-  if (indices)
-  {
-    sendCommandi(BASE, (((unsigned int)indices) >> 8) & 0xf0000);
-    sendCommandi(IADDR, ((unsigned int)indices));
-  }
-
-  if (vertices)
-  {
-    sendCommandi(BASE, (((unsigned int)vertices) >> 8) & 0xf0000);
-    sendCommandi(VADDR, ((unsigned int)vertices));
-  }
-
-  sendCommandi(PRIM, (prim << 16) | count);
+  sceGupDrawArray(__guSettings.context, prim, vtype, count, indices, vertices);
   _sceGuUpdateStallAddr();
 }

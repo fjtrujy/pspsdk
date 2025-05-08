@@ -10,19 +10,26 @@
 
 void sceGuDrawBuffer(int psm, void *fbp, int frame_width)
 {
-	gu_draw_buffer.pixel_size = psm;
-	gu_draw_buffer.frame_width = frame_width;
-	gu_draw_buffer.frame_buffer = fbp;
+	int i;
 
-	if (!gu_draw_buffer.depth_buffer && gu_draw_buffer.height)
-		gu_draw_buffer.depth_buffer = (void *)(((unsigned int)fbp) + (unsigned int)((gu_draw_buffer.height * frame_width) << 2));
+	sceGupDrawBuffer(__guSettings.context, psm, fbp, frame_width);
 
-	if (!gu_draw_buffer.depth_width)
-		gu_draw_buffer.depth_width = frame_width;
+	/* updates all list_mode's draw buffer */
+	for (i=0; i<LISTMODE_MAX; i++) {
+		sceGupSetFrameBuffer(&__guSettings.listctx[i].packet, __guSettings.frameBuf.fpf, __guSettings.frameBuf.sw, __guSettings.frameBuf.sh);
+	}
 
-	sendCommandi(FRAMEBUF_PIX_FORMAT, psm);
-	sendCommandi(FRAME_BUF_PTR, (unsigned int)gu_draw_buffer.frame_buffer);
-	sendCommandi(FRAME_BUF_WIDTH, ((((unsigned int)gu_draw_buffer.frame_buffer) & 0xff000000) >> 8) | gu_draw_buffer.frame_width);
-	sendCommandi(Z_BUF_PTR, (unsigned int)gu_draw_buffer.depth_buffer);
-	sendCommandi(Z_BUF_WIDTH, ((((unsigned int)gu_draw_buffer.depth_buffer) & 0xff000000) >> 8) | gu_draw_buffer.depth_width);
+	/* global variable __guSettings.frameBuf is not independent for each mode  */
+	__guSettings.frameBuf.fpf = psm;
+	__guSettings.frameBuf.wbp = (unsigned int)fbp;
+	__guSettings.frameBuf.fbw = frame_width;
+
+	/* conditionally approve when depth buffer has not been set */
+	if ((__guSettings.frameBuf.zbp == 0) && (__guSettings.frameBuf.sh != 0)) {
+		__guSettings.frameBuf.zbp = __guSettings.frameBuf.wbp;
+		__guSettings.frameBuf.zbp += __guSettings.frameBuf.sh * (frame_width * 2) * 2; /* draw disp depth */
+	}
+	if (__guSettings.frameBuf.zbw == 0) {
+		__guSettings.frameBuf.zbw = frame_width;
+	}
 }

@@ -11,8 +11,18 @@
 #include <pspkernel.h>
 #include <pspge.h>
 
-void sceGuTerm(void)
+#define ERROR_NOT_INITIALIZED 0x80000001
+
+int sceGuTerm(void)
 {
-	sceKernelDeleteEventFlag(gu_settings.kernel_event_flag);
-	sceGeUnsetCallback(gu_settings.ge_callback_id);
+	if (__guSettings.library_initialized==0) {
+		return ERROR_NOT_INITIALIZED;
+	}
+	sceKernelDeleteEventFlag(__intrParam.evid);
+	sceGeUnsetCallback(__guSettings.intrId);
+	__intrParam.evid  = -1;
+	__guSettings.intrId  = -1;
+	__guSettings.context = NULL;
+	__guSettings.library_initialized = 0;
+	return 0;
 }

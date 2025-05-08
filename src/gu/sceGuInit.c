@@ -12,6 +12,8 @@
 #include <pspge.h>
 #include <pspdisplay.h>
 
+#define ERROR_ALREADY_INITIALIZED 0x80000001
+
 // Zero value
 #define ZV(command) (uint32_t)(command << 24 | 0x00000000)
 
@@ -236,74 +238,57 @@ static unsigned int __attribute__((aligned(16))) ge_init_list[] = {
 
 static void sceGuResetGlobalVariables(void)
 {
-	unsigned int i;
+	int i;
 
-	gu_init = 0;
+	__guSettings.dither_initialized = 0;
 
-	gu_states = 0;
-	gu_object_stack_depth = 0;
+	__guSettings.frameBuf.fpf = GU_PSM_5551;
+	__guSettings.frameBuf.fbw = GU_SCR_WIDTH;
+	__guSettings.frameBuf.wbp = 0;
+	__guSettings.frameBuf.dbp = 0;
+	__guSettings.frameBuf.zbp = 0;
+	__guSettings.frameBuf.zbw = 0;
+	__guSettings.frameBuf.sw  = GU_SCR_WIDTH;
+	__guSettings.frameBuf.sh  = GU_SCR_HEIGHT;
 
-	gu_display_on = GU_DISPLAY_OFF;
-	gu_call_mode = GU_CALL_NORMAL;
+	__guSettings.disp_sw = GU_DISPLAY_OFF;
+	__guSettings.call_mode = GU_CALL_NORMAL;
+	__guSettings.list_mode = -1;
 
-	gu_draw_buffer.pixel_size = GU_PSM_5551;
-	gu_draw_buffer.frame_width = GU_SCR_WIDTH;
-	gu_draw_buffer.frame_buffer = 0;
-	gu_draw_buffer.disp_buffer = 0;
-	gu_draw_buffer.depth_buffer = 0;
-	gu_draw_buffer.depth_width = 0;
-	gu_draw_buffer.width = GU_SCR_WIDTH;
-	gu_draw_buffer.height = GU_SCR_HEIGHT;
-
-	for (i = 0; i < 3; ++i)
-	{
-		GuContext* context = &gu_contexts[i];
-
-		context->scissor_enable = 0;
-		context->scissor_start[0] = 0;
-		context->scissor_start[1] = 0;
-		context->scissor_end[0] = 0;
-		context->scissor_end[1] = 0;
-
-		context->near_plane = 0;
-		context->far_plane = 1;
-
-		context->depth_offset = 0;
-		context->fragment_2x = 0;
-		context->texture_function = 0;
-		context->texture_proj_map_mode = 0;
-		context->texture_map_mode = 0;
-		context->sprite_mode[0] = 0;
-		context->sprite_mode[1] = 0;
-		context->sprite_mode[2] = 0;
-		context->sprite_mode[3] = 0;
-		context->clear_color = 0;
-		context->clear_stencil = 0;
-		context->clear_depth = 0xffff;
-		context->texture_mode = 0;
+	__guSettings.context  = NULL;
+	__guSettings.states = 0;
+	for (i=0; i<LISTMODE_MAX; i++) {
+		sceGupResetContext(&__guSettings.listctx[i].packet);
+		__guSettings.listctx[i].prevmode = -1;
 	}
 
-	gu_settings.sig = NULL;
-	gu_settings.fin = NULL;
+	__intrParam.cbSignal = NULL;
+	__intrParam.cbFinish = NULL;
 }
 
-void callbackFin(int id, void *arg)
+void callbackFin(int intrcode, void *cookie, const void *madr)
 {
-	GuSettings *settings = (GuSettings *)arg;
-	if (settings->fin)
-		settings->fin(id & 0xffff);
+	IntrParam *p = (IntrParam *)cookie;
+	int val = (intrcode & 0xffff);
+
+	if (p->cbFinish != NULL) {
+		p->cbFinish(val, madr);
+	}
 }
 
-void callbackSig(int id, void *arg)
+void callbackSig(int intrcode, void *cookie, const void *madr)
 {
-	GuSettings *settings = (GuSettings *)arg;
+	IntrParam	*p = (IntrParam *)cookie;
+	int val = (intrcode & 0xffff);
 
-	settings->signal_history[(settings->signal_offset++) & 15] = id & 0xffff;
+	p->buffer[p->count % SIGNAL_MAX] = (unsigned short)val;
+	p->count++;
 
-	if (settings->sig)
-		settings->sig(id & 0xffff);
-
-	sceKernelSetEventFlag(settings->kernel_event_flag, 1);
+	if (p->cbSignal != NULL) {
+		p->cbSignal(val, madr);
+	}
+	sceKernelSetEventFlag(p->evid, EVFLAG_SIGNAL);
+	return;
 }
 
 int sceGuInit(void)
@@ -311,46 +296,46 @@ int sceGuInit(void)
 	int res;
 	PspGeCallbackData callback;
 
-	ge_edram_address = sceGeEdramGetAddr();
+	if (__guSettings.library_initialized!=0) {
+		return (ERROR_ALREADY_INITIALIZED);
+	}
+
+	__guSettings.ge_edram_address = (unsigned char *)sceGeEdramGetAddr();
 	sceGuResetGlobalVariables();
 
-	res = sceKernelCreateEventFlag("SceGuSignal", PSP_EVENT_WAITMULTIPLE, 3, 0);
-	if (res < 0)
-	{
-		return res;
+	res = sceKernelCreateEventFlag("SceGuSignal", PSP_EVENT_WAITMULTIPLE, EVFLAG_SIGNAL, NULL);
+	if (res < 0) {
+		return (res);
 	}
-	gu_settings.kernel_event_flag = res;
+	__intrParam.evid = res;
 
 	callback.signal_func = callbackSig;
-	callback.signal_arg = &gu_settings;
+	callback.signal_arg = &__intrParam;
 	callback.finish_func = callbackFin;
-	callback.finish_arg = &gu_settings;
+	callback.finish_arg = &__intrParam;
 	res = sceGeSetCallback(&callback);
-	if (res < 0)
-	{
-		sceKernelDeleteEventFlag(gu_settings.kernel_event_flag);
-		gu_settings.kernel_event_flag = -1;
-		return res;
+	if (res < 0) {
+		sceKernelDeleteEventFlag(__intrParam.evid);
+		__intrParam.evid = -1;
+		return (res);
 	}
-	gu_settings.ge_callback_id = res;
+	__guSettings.intrId = res;
 
 	// initialize graphics hardware
-	res = sceGeListEnQueue((void *)((unsigned int)ge_init_list & 0x1fffffff), NULL, gu_settings.ge_callback_id, NULL);
+	res = sceGeListEnQueue(ge_init_list, NULL, -1, NULL);
 	if (res < 0)
 	{
-		sceKernelDeleteEventFlag(gu_settings.kernel_event_flag);
-		sceGeUnsetCallback(gu_settings.ge_callback_id);
-		gu_settings.ge_callback_id = -1;
-		gu_settings.kernel_event_flag = -1;
+		sceKernelDeleteEventFlag(__intrParam.evid);
+		sceGeUnsetCallback(__guSettings.intrId);
+		__intrParam.evid = -1;
+		__guSettings.intrId = -1;
 		return res;
 	}
-	ge_list_executed[0] = res;
+	__guSettings.queid[0] = res;
 	// wait for init to complete
-	sceGeListSync(ge_list_executed[0], 0);
+	sceGeListSync(__guSettings.queid[0], 0);
 	sceGeDrawSync(0);
 
-	gu_settings.swapBuffersCallback = NULL;
-	gu_settings.swapBuffersBehaviour = PSP_DISPLAY_SETBUF_NEXTHSYNC;
-
+	__guSettings.library_initialized = 1;
 	return 0;
 }

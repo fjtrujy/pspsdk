@@ -12,13 +12,5 @@
 
 void sceGuTexLevelMode(unsigned int mode, float bias)
 {
-	int offset = (int)truncf(bias * 16.0f);
-
-	// mip map bias?
-	if (offset >= 128)
-		offset = 128;
-	else if (offset < -128)
-		offset = -128;
-
-	sendCommandi(TEX_LEVEL, (((unsigned int)(offset)) << 16) | mode);
+	sceGupTexLevelMode(__guSettings.context, mode, bias);
 }

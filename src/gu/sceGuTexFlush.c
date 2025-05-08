@@ -10,5 +10,5 @@
 
 void sceGuTexFlush(void)
 {
-	sendCommandi(TEX_FLUSH, 0);
+	sceGupTexFlush(__guSettings.context);
 }

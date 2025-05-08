@@ -10,6 +10,5 @@
 
 void sceGuAmbient(unsigned int color)
 {
-	sendCommandi(AMBIENT_LIGHT_COLOR,(color));
-	sendCommandi(AMBIENT_LIGHT_ALPHA,(color >> 24));
+	sceGupAmbient(__guSettings.context, color);
 }

@@ -10,5 +10,5 @@
 
 void sceGuCallMode(int mode)
 {
-	gu_call_mode = mode;
+	__guSettings.call_mode = mode;
 }

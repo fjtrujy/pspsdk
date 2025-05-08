@@ -10,8 +10,5 @@
 
 void sceGuDepthOffset(unsigned int offset)
 {
-	GuContext* context = &gu_contexts[gu_curr_context];
-	context->depth_offset = offset;
-
-	sceGuDepthRange(context->near_plane,context->far_plane);
+	sceGupDepthOffset(__guSettings.context, offset);
 }

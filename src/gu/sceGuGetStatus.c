@@ -11,6 +11,6 @@
 int sceGuGetStatus(int state)
 {
 	if (state < GU_MAX_STATUS)
-		return (gu_states >> state) & 1;
+		return (__guSettings.states >> state) & 1;
 	return 0;
 }

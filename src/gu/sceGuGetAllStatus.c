@@ -10,5 +10,5 @@
 
 int sceGuGetAllStatus(void)
 {
-	return gu_states;
+	return __guSettings.states;
 }

@@ -10,11 +10,5 @@
 
 void sceGuTexMode(int tpsm, int maxmips, int mc, int swizzle)
 {
-	GuContext *context = &gu_contexts[gu_curr_context];
-	context->texture_mode = tpsm;
-
-	sendCommandi(TEX_MODE, (maxmips << 16) | (mc << 8) | (swizzle));
-	sendCommandi(TEX_FORMAT, tpsm);
-
-	sceGuTexFlush();
+	sceGupTexMode(__guSettings.context, tpsm, maxmips, mc, swizzle);
 }

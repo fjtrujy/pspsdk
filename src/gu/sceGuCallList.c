@@ -13,15 +13,13 @@ int sceGuCallList(const void *list)
 	int res;
 	unsigned int list_addr = (unsigned int)list;
 
-	if (gu_call_mode == GU_CALL_SIGNAL)
+	if (__guSettings.call_mode == GU_CALL_SIGNAL)
 	{
-		sendCommandi(SIGNAL, (list_addr >> 16) | 0x110000);
-		sendCommandi(END, list_addr & 0xffff);
+		sceGupSignalCall(__guSettings.context, list_addr);
 	}
 	else
 	{
-		sendCommandi(BASE, (list_addr >> 8) & 0xf0000);
-		sendCommandi(CALL, list_addr);
+		sceGupCall(__guSettings.context, list_addr);
 	}
 
 	res = _sceGuUpdateStallAddr();

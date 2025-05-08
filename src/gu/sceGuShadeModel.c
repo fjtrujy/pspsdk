@@ -10,5 +10,5 @@
 
 void sceGuShadeModel(int mode)
 {
-	sendCommandi(SHADE_MODE, mode);
+	sceGupShadeModel(__guSettings.context, mode);
 }

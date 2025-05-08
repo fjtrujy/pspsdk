@@ -10,5 +10,5 @@
 
 void sceGuDepthMask(int mask)
 {
-	sendCommandi(Z_MASK, mask);
+	sceGupDepthMask(__guSettings.context, mask);
 }

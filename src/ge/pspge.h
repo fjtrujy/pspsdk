@@ -32,7 +32,7 @@ typedef struct
 } SceGeStack;
 
 /** Typedef for a GE callback */
-typedef void (*PspGeCallback)(int id, void *arg);
+typedef void (*PspGeCallback)(int intrcode, void *cookie, const void *madr);
 
 /** Structure to hold the callback data */
 typedef struct PspGeCallbackData

@@ -10,5 +10,5 @@
 
 void sceGuColorMaterial(int components)
 {
-	sendCommandi(MATERIAL_COLOR, components);
+	sceGupColorMaterial(__guSettings.context, components);
 }

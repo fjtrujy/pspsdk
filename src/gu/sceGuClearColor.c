@@ -10,6 +10,5 @@
 
 void sceGuClearColor(unsigned int color)
 {
-	GuContext* context = &gu_contexts[gu_curr_context];
-	context->clear_color = color;
+	sceGupClearColor(__guSettings.context, color);
 }

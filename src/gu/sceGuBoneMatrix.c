@@ -10,16 +10,5 @@
 
 void sceGuBoneMatrix(unsigned int index, const ScePspFMatrix4 *matrix)
 {
-	unsigned int offset = ((index << 1) + index) << 2; // 3*4 matrix
-	unsigned int i, j;
-	const float *fmatrix = (const float *)matrix;
-
-	sendCommandi(BONE_MATRIX_NUMBER, offset);
-	for (i = 0; i < 4; ++i)
-	{
-		for (j = 0; j < 3; ++j)
-		{
-			sendCommandf(BONE_MATRIX_DATA, fmatrix[j + (i << 2)]);
-		}
-	}
+	sceGupBoneMatrix(__guSettings.context, index, matrix);
 }

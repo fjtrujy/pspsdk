@@ -10,5 +10,5 @@
 
 void sceGuTexSlope(float slope)
 {
-	sendCommandf(TEX_LOD_SLOPE, slope);
+	sceGupTexSlope(__guSettings.context, slope);
 }

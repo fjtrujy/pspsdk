@@ -10,7 +10,7 @@ CPPFLAGS = -I$(top_srcdir)/src/base -I$(top_srcdir)/src/kernel -I$(top_srcdir)/s
 CFLAGS =  @PSPSDK_CFLAGS@
 
 libpspguincludedir = @PSPSDK_INCLUDEDIR@
-libpspguinclude_HEADERS = pspgu.h
+libpspguinclude_HEADERS = pspgup.h pspgu.h
 
 lib_LIBRARIES = libpspgu.a
 

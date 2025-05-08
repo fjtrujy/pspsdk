@@ -10,9 +10,5 @@
 
 void sceGuLightAtt(int light, float atten0, float atten1, float atten2)
 {
-	int offset = light * 3;
-
-	sendCommandf(LIGHT0_CONSTANT_ATTEN + offset, atten0);
-	sendCommandf(LIGHT0_LINEAR_ATTEN + offset, atten1);
-	sendCommandf(LIGHT0_QUADRATIC_ATTEN + offset, atten2);
+	sceGupLightAtt(__guSettings.context, light, atten0, atten1, atten2);
 }

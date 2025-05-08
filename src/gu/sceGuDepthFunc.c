@@ -10,5 +10,5 @@
 
 void sceGuDepthFunc(int function)
 {
-	sendCommandi(Z_TEST, function);
+	sceGupDepthFunc(__guSettings.context, function);
 }

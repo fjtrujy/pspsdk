@@ -10,5 +10,5 @@
 
 void sceGuPatchFrontFace(unsigned int mode)
 {
-	sendCommandi(PATCH_FACING, mode);
+	sceGupPatchFrontFace(__guSettings.context, mode);
 }

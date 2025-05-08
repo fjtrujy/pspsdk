@@ -10,8 +10,5 @@
 
 void sceGuModelColor(unsigned int emissive, unsigned int ambient, unsigned int diffuse, unsigned int specular)
 {
-	sendCommandi(MATERIAL_EMISSIVE, emissive);
-	sendCommandi(MATERIAL_DIFFUSE, diffuse);
-	sendCommandi(AMBIENT_COLOR, ambient);
-	sendCommandi(MATERIAL_SPECULAR, specular);
+	sceGupModelColor(__guSettings.context, emissive, ambient, diffuse, specular);
 }

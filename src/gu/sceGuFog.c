@@ -10,12 +10,5 @@
 
 void sceGuFog(float near, float far, unsigned int color)
 {
-	float distance = far - near;
-
-	if (distance)
-		distance = 1.0f / distance;
-
-	sendCommandi(FOG_COLOR, color);
-	sendCommandf(FOG1, far);
-	sendCommandf(FOG2, distance);
+	sceGupFog(__guSettings.context, near, far, color);
 }

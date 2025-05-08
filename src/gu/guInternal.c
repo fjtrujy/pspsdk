@@ -8,16 +8,5 @@
 
 #include "guInternal.h"
 
-GuContext gu_contexts[3];
-int ge_list_executed[2];
-void* ge_edram_address;
-GuSettings gu_settings;
-GuDisplayList* gu_list;
-int gu_curr_context;
-int gu_init;
-int gu_display_on;
-int gu_call_mode;
-int gu_states;
-GuDrawBuffer gu_draw_buffer;
-unsigned int* gu_object_stack[32];
-int gu_object_stack_depth;
+GU_Settings __guSettings;
+IntrParam __intrParam;

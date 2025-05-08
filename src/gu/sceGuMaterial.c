@@ -10,14 +10,5 @@
 
 void sceGuMaterial(int mode, int color)
 {
-	if (mode & GU_AMBIENT) {
-		sendCommandi(AMBIENT_COLOR, color);
-		sendCommandi(AMBIENT_ALPHA, color >> 24);
-	}
-
-	if (mode & GU_DIFFUSE)
-		sendCommandi(MATERIAL_DIFFUSE, color);
-
-	if (mode & GU_SPECULAR)
-		sendCommandi(MATERIAL_SPECULAR, color);
+	sceGupMaterial(__guSettings.context, mode, color);
 }

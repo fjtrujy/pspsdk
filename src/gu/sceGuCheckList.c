@@ -10,5 +10,5 @@
 
 int sceGuCheckList(void)
 {
-	return ((int)gu_list->current)-((int)gu_list->start);
+	return sceGupGetCurrentSize(__guSettings.context);
 }

@@ -10,6 +10,5 @@
 
 void sceGuClutMode(unsigned int cpsm, unsigned int shift, unsigned int mask, unsigned int csa)
 {
-	unsigned int argument = (cpsm) | (shift << 2) | (mask << 8) | (csa << 16);
-	sendCommandi(CLUT_FORMAT, argument);
+	sceGupClutMode(__guSettings.context, cpsm, shift, mask, csa);
 }

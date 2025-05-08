@@ -13,29 +13,30 @@
 
 void *sceGuSwapBuffers(void)
 {
-	if (gu_settings.swapBuffersCallback)
-	{
-		gu_settings.swapBuffersCallback(&gu_draw_buffer.disp_buffer, &gu_draw_buffer.frame_buffer);
-	}
-	else
-	{
-		void *temp = gu_draw_buffer.disp_buffer;
-		gu_draw_buffer.disp_buffer = gu_draw_buffer.frame_buffer;
-		gu_draw_buffer.frame_buffer = temp;
-	}
+	// TODO: Implement swap buffers callback
 
-	if (gu_display_on == GU_TRUE)
-		sceDisplaySetFrameBuf((void *)((unsigned int)ge_edram_address + (unsigned int)gu_draw_buffer.disp_buffer), gu_draw_buffer.frame_width, gu_draw_buffer.pixel_size, gu_settings.swapBuffersBehaviour);
+	// if (__guSettings.swap_buffers_callback)
+	// {
+	// 	__guSettings.swap_buffers_callback(&__guSettings.frameBuf.dbp, &__guSettings.frameBuf.wbp);
+	// } else {
+	// 	unsigned int tmp = __guSettings.frameBuf.dbp;
+	// 	__guSettings.frameBuf.dbp = __guSettings.frameBuf.wbp;
+	// 	__guSettings.frameBuf.wbp = tmp;
+	// }
 
-	return gu_draw_buffer.frame_buffer;
+	if (__guSettings.disp_sw == GU_DISPLAY_ON) {
+		sceDisplaySetFrameBuf((void *)(__guSettings.ge_edram_address + __guSettings.frameBuf.dbp), __guSettings.frameBuf.fbw, __guSettings.frameBuf.fpf, __guSettings.swap_buffers_behaviour);
+	}
+	
+	return ((void *)__guSettings.frameBuf.wbp);
 }
 
 void guSwapBuffersBehaviour(int behaviour)
 {
-	gu_settings.swapBuffersBehaviour = behaviour;
+	__guSettings.swap_buffers_behaviour = behaviour;
 }
 
 void guSwapBuffersCallback(GuSwapBuffersCallback callback)
 {
-	gu_settings.swapBuffersCallback = callback;
+	__guSettings.swap_buffers_callback = callback;
 }

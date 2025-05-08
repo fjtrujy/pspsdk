@@ -10,6 +10,5 @@
 
 void sceGuTexScale(float u, float v)
 {
-	sendCommandf(TEX_SCALE_U, u);
-	sendCommandf(TEX_SCALE_V, v);
+	sceGupTexScale(__guSettings.context, u, v);
 }

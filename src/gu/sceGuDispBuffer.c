@@ -11,17 +11,29 @@
 #include <pspkernel.h>
 #include <pspdisplay.h>
 
+
+static void sceGuDispBufferExt(int fpf, int width, int height, void *dispbp, int dispbw)
+{
+	__guSettings.frameBuf.fpf = fpf;
+	__guSettings.frameBuf.sw  = width;
+	__guSettings.frameBuf.sh  = height;
+	__guSettings.frameBuf.dbp = (unsigned int)dispbp;
+	__guSettings.frameBuf.fbw = dispbw;
+
+	sceDisplaySetMode(PSP_DISPLAY_MODE_LCD, __guSettings.frameBuf.sw, __guSettings.frameBuf.sh);
+	if (__guSettings.disp_sw == GU_DISPLAY_ON) {
+		sceDisplaySetFrameBuf((void *)(__guSettings.ge_edram_address + __guSettings.frameBuf.dbp), dispbw, fpf, PSP_DISPLAY_SETBUF_NEXTVSYNC);
+	}
+}
+
 void sceGuDispBuffer(int width, int height, void *dispbp, int dispbw)
 {
-	gu_draw_buffer.width = width;
-	gu_draw_buffer.height = height;
-	gu_draw_buffer.disp_buffer = dispbp;
+	int i;
 
-	if (!gu_draw_buffer.frame_width || (gu_draw_buffer.frame_width != dispbw))
-		gu_draw_buffer.frame_width = dispbw;
+	sceGuDispBufferExt(__guSettings.frameBuf.fpf, width, height, dispbp, dispbw);
 
-	sceDisplaySetMode(PSP_DISPLAY_MODE_LCD, gu_draw_buffer.width, gu_draw_buffer.height);
-
-	if (gu_display_on == GU_DISPLAY_ON)
-		sceDisplaySetFrameBuf((void *)(((unsigned int)ge_edram_address) + ((unsigned int)gu_draw_buffer.disp_buffer)), dispbw, gu_draw_buffer.pixel_size, PSP_DISPLAY_SETBUF_NEXTVSYNC);
+	/* updates all list_mode's draw buffer */
+	for (i=0; i<LISTMODE_MAX; i++) {
+		sceGupSetFrameBuffer(&__guSettings.listctx[i].packet, __guSettings.frameBuf.fpf, __guSettings.frameBuf.sw, __guSettings.frameBuf.sh);
+	}
 }

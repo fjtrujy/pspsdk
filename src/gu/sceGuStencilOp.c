@@ -10,5 +10,5 @@
 
 void sceGuStencilOp(int fail, int zfail, int zpass)
 {
-	sendCommandi(STENCIL_OP, fail | (zfail << 8) | (zpass << 16));
+	sceGupStencilOp(__guSettings.context, fail, zfail, zpass);
 }

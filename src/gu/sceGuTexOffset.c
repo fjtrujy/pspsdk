@@ -10,6 +10,5 @@
 
 void sceGuTexOffset(float u, float v)
 {
-	sendCommandf(TEX_OFFSET_U, u);
-	sendCommandf(TEX_OFFSET_V, v);
+	sceGupTexOffset(__guSettings.context, u, v);
 }

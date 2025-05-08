@@ -10,6 +10,5 @@
 
 void sceGuOffset(unsigned int x, unsigned int y)
 {
-	sendCommandi(OFFSET_X, x << 4);
-	sendCommandi(OFFSET_Y, y << 4);
+	sceGupOffset(__guSettings.context, x, y);
 }

@@ -10,5 +10,5 @@
 
 void sceGuSendCommandf(int cmd, float argument)
 {
-	sendCommandf(cmd,argument);
+	sceGupSendCommandf(__guSettings.context, cmd, argument);
 }

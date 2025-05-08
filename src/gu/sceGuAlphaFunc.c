@@ -10,6 +10,5 @@
 
 void sceGuAlphaFunc(int func, int value, int mask)
 {
-	int arg = func | ((value & 0xff) << 8) | ((mask & 0xff) << 16);
-	sendCommandi(ALPHA_TEST, arg);
+	sceGupAlphaFunc(__guSettings.context, func, value, mask);
 }

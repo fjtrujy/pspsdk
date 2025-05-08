@@ -10,5 +10,5 @@
 
 void sceGuMorphWeight(int index, float weight)
 {
-	sendCommandf(MORPH_WEIGHT0 + index, weight);
+	sceGupMorphWeight(__guSettings.context, index, weight);
 }

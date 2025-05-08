@@ -10,5 +10,5 @@
 
 void sceGuLightMode(int mode)
 {
-	sendCommandi(LIGHT_MODE, mode);
+	sceGupLightMode(__guSettings.context, mode);
 }

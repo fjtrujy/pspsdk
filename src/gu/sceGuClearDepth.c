@@ -10,6 +10,5 @@
 
 void sceGuClearDepth(unsigned int depth)
 {
-	GuContext* context = &gu_contexts[gu_curr_context];
-	context->clear_depth = depth;
+	sceGupClearDepth(__guSettings.context, depth);
 }

@@ -10,5 +10,5 @@
 
 void sceGuLogicalOp(int op)
 {
-	sendCommandi(LOGIC_OP, op & 0x0f);
+	sceGupLogicalOp(__guSettings.context, op);
 }

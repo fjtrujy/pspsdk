@@ -10,5 +10,5 @@
 
 void sceGuTexWrap(int u, int v)
 {
-	sendCommandi(TEX_WRAP, (v << 8) | (u));
+	sceGupTexWrap(__guSettings.context, u, v);
 }

@@ -10,16 +10,22 @@
 #include <pspdisplay.h>
 #include <pspuser.h>
 
+#define ERROR_BUSY 0x80020001
+
 int sceGuFinishId(unsigned int id)
 {
 	int ret;
 	int intr;
+	int prevmode;
 
-	switch (gu_curr_context)
+	if (sceGupGetBoundingBoxNest(__guSettings.context)!=0) {
+		return ERROR_BUSY;
+	}	
+
+	switch (__guSettings.list_mode)
 	{
 	case GU_DIRECT:
-		sendCommandi(FINISH, id & 0xffff);
-		sendCommandi(END, 0);
+		sceGupFinishId(__guSettings.context, id);
 		ret = _sceGuUpdateStallAddr();
 		if (ret < 0)
 		{
@@ -27,30 +33,35 @@ int sceGuFinishId(unsigned int id)
 		}
 		break;
 	case GU_SEND:
-		sendCommandi(FINISH, id & 0xffff);
-		sendCommandi(END, 0);
+		sceGupFinishId(__guSettings.context, id);
 		break;
 	case GU_CALL:
-		if (gu_call_mode == GU_CALL_SIGNAL)
+		if (__guSettings.call_mode == GU_CALL_SIGNAL)
 		{
-			sendCommandi(SIGNAL, 0x120000);
-			sendCommandi(END, 0);
+			sceGupSignalRet(__guSettings.context, id);
 		}
 		else
 		{
-			sendCommandi(RET, 0);
+			sceGupRet(__guSettings.context);
 		}
 		break;
 	default:
 		return SCE_DISPLAY_ERROR_ARGUMENT;
 	}
 
-	unsigned int size = ((unsigned int)gu_list->current) - ((unsigned int)gu_list->start);
+	ret = sceGupGetCurrentSize(__guSettings.context);	
 
 	// go to parent list
 	intr = sceKernelCpuSuspendIntr();
-	gu_curr_context = gu_list->parent_context;
-	gu_list = &gu_contexts[gu_curr_context].list;
+	prevmode = __guSettings.listctx[__guSettings.list_mode].prevmode;
+	__guSettings.listctx[__guSettings.list_mode].prevmode = -1;
+	__guSettings.list_mode = prevmode;
+
+	if (prevmode < 0) {
+		__guSettings.context  = NULL;
+	} else {
+		__guSettings.context  = &__guSettings.listctx[__guSettings.list_mode].packet;
+	}
 	sceKernelCpuResumeIntr(intr);
-	return size;
+	return ret;
 }

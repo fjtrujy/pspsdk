@@ -10,21 +10,6 @@
 
 void sceGuDrawBezier(int vertex_type, int ucount, int vcount, const void *indices, const void *vertices)
 {
-  if (vertex_type)
-    sendCommandi(VERTEX_TYPE, vertex_type);
-
-  if (indices)
-  {
-    sendCommandi(BASE, (((unsigned int)indices) >> 8) & 0xf0000);
-    sendCommandi(IADDR, (unsigned int)indices);
-  }
-
-  if (vertices)
-  {
-    sendCommandi(BASE, (((unsigned int)vertices) >> 8) & 0xf0000);
-    sendCommandi(VADDR, (unsigned int)vertices);
-  }
-
-  sendCommandi(BEZIER, (vcount << 8) | ucount);
-  _sceGuUpdateStallAddr();
+  	sceGupDrawBezier(__guSettings.context, vertex_type, ucount, vcount, indices, vertices);
+  	_sceGuUpdateStallAddr();
 }

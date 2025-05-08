@@ -10,5 +10,5 @@
 
 void sceGuPatchDivide(unsigned int ulevel, unsigned int vlevel)
 {
-	sendCommandi(PATCH_DIVISION, (vlevel << 8) | ulevel);
+	sceGupPatchDivide(__guSettings.context, ulevel, vlevel);
 }

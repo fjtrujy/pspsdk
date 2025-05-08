@@ -10,58 +10,5 @@
 
 void sceGuSetMatrix(int type, const ScePspFMatrix4 *matrix)
 {
-	unsigned int i, j;
-	const float *fmatrix = (const float *)matrix;
-
-	switch (type)
-	{
-	case GU_PROJECTION:
-	{
-		sendCommandf(PROJ_MATRIX_NUMBER, 0);
-
-		// 4*4 - most probably projection
-		for (i = 0; i < 16; ++i)
-			sendCommandf(PROJ_MATRIX_DATA, fmatrix[i]);
-	}
-	break;
-
-	case GU_VIEW:
-	{
-		sendCommandf(VIEW_MATRIX_NUMBER, 0);
-
-		// 4*4 -> 3*4 - view matrix?
-		for (i = 0; i < 4; ++i)
-		{
-			for (j = 0; j < 3; ++j)
-				sendCommandf(VIEW_MATRIX_DATA, fmatrix[j + i * 4]);
-		}
-	}
-	break;
-
-	case GU_MODEL:
-	{
-		sendCommandf(WORLD_MATRIX_NUMBER, 0);
-
-		// 4*4 -> 3*4 - ???
-		for (i = 0; i < 4; ++i)
-		{
-			for (j = 0; j < 3; ++j)
-				sendCommandf(WORLD_MATRIX_DATA, fmatrix[j + i * 4]);
-		}
-	}
-	break;
-
-	case GU_TEXTURE:
-	{
-		sendCommandf(TGEN_MATRIX_NUMBER, 0);
-
-		// 4*4 -> 3*4 - ???
-		for (i = 0; i < 4; ++i)
-		{
-			for (j = 0; j < 3; ++j)
-				sendCommandf(TGEN_MATRIX_DATA, fmatrix[j + i * 4]);
-		}
-	}
-	break;
-	}
+	sceGupSetMatrix(__guSettings.context, type, matrix);
 }

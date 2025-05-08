@@ -13,16 +13,20 @@
 
 int sceGuDisplay(int state)
 {
-	if (state == GU_TRUE)
-		sceDisplaySetFrameBuf((void *)((unsigned int)ge_edram_address + (unsigned int)gu_draw_buffer.disp_buffer), gu_draw_buffer.frame_width, gu_draw_buffer.pixel_size, PSP_DISPLAY_SETBUF_NEXTVSYNC);
-	else
-		sceDisplaySetFrameBuf(NULL, 0, 0, PSP_DISPLAY_SETBUF_NEXTVSYNC);
+	int prev_state;
 
-	gu_display_on = state;
-	return state;
+	if (state == GU_DISPLAY_OFF) {
+		sceDisplaySetFrameBuf(NULL, 0, __guSettings.frameBuf.fpf, PSP_DISPLAY_SETBUF_NEXTVSYNC);
+	} else {
+		sceDisplaySetFrameBuf((void *)(__guSettings.ge_edram_address + __guSettings.frameBuf.dbp), __guSettings.frameBuf.fbw, __guSettings.frameBuf.fpf, PSP_DISPLAY_SETBUF_NEXTVSYNC);
+	}
+	prev_state = __guSettings.disp_sw;
+	__guSettings.disp_sw = state;
+
+	return prev_state;
 }
 
 int guGetDisplayState()
 {
-	return gu_display_on;
+	return __guSettings.disp_sw;
 }

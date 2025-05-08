@@ -18,9 +18,9 @@ int sceGuSync(int mode, int what)
 	case GU_SYNC_FINISH:
 		return sceGeDrawSync(what);
 	case GU_SYNC_LIST:
-		return sceGeListSync(ge_list_executed[0], what);
+		return sceGeListSync(__guSettings.queid[0], what);
 	case GU_SYNC_SEND:
-		return sceGeListSync(ge_list_executed[1], what);
+		return sceGeListSync(__guSettings.queid[1], what);
 	default:
 	case GU_SYNC_SIGNAL:
 	case GU_SYNC_DONE:

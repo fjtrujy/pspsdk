@@ -10,5 +10,5 @@
 
 void sceGuTexEnvColor(unsigned int color)
 {
-	sendCommandi(TEX_ENV_COLOR, color);
+	sceGupTexEnvColor(__guSettings.context, color);
 }

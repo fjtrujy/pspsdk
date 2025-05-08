@@ -10,8 +10,5 @@
 
 void sceGuTexFunc(int tfx, int tcc)
 {
-	GuContext *context = &gu_contexts[gu_curr_context];
-	context->texture_function = (tcc << 8) | tfx;
-
-	sendCommandi(TEX_FUNC, ((tcc << 8) | tfx) | context->fragment_2x);
+	sceGupTexFunc(__guSettings.context, tfx, tcc);
 }

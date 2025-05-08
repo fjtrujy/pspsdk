@@ -10,6 +10,5 @@
 
 void sceGuClearStencil(unsigned int stencil)
 {
-	GuContext* context = &gu_contexts[gu_curr_context];
-	context->clear_stencil = stencil;
+	sceGupClearStencil(__guSettings.context, stencil);
 }

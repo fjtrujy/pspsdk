@@ -10,5 +10,5 @@
 
 void sceGuTexSync()
 {
-	sendCommandi(TEX_SYNC, 0);
+	sceGupTexSync(__guSettings.context);
 }
