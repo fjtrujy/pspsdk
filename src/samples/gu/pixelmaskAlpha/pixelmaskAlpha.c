@@ -117,7 +117,11 @@ int main(int argc, char *argv[])
     sceGuEnable(GU_SCISSOR_TEST);
     sceGuClear(GU_COLOR_BUFFER_BIT | GU_DEPTH_BUFFER_BIT);
 
-    sceGuTexFunc(GU_TFX_MODULATE, GU_TCC_RGBA);
+    sceGuDisable(GU_ALPHA_TEST);
+    sceGuDisable(GU_STENCIL_TEST);
+    sceGuShadeModel(GU_SMOOTH);
+
+    sceGuTexFunc(GU_TFX_REPLACE, GU_TCC_RGBA);
     sceGuTexFilter(GU_NEAREST, GU_NEAREST);
 
     sceGuFinish();
@@ -137,18 +141,14 @@ int main(int argc, char *argv[])
         // Set the texture as render target
         sceGuDrawBufferList(drawFormat, targetTexture, BUF_WIDTH);
 
+        // sceGuClearStencil(0xFF);
+        // sceGuClear(GU_STENCIL_BUFFER_BIT);
+
         // Draw a solid BLACK no alpha sprite
-        drawFullscreenSpriteNoTex(COLOR_BLACK_NO_ALPHA);
+        sceGuDisable(GU_BLEND);
+        drawFullscreenSpriteNoTex(COLOR_BLUE);
 
-        // Draw the smile texture on the render target
-        sceGuTexMode(GU_PSM_5551, 0, 0, 0);
-        sceGuTexImage(0, smile_data_width, smile_data_height, smile_data_width, smile_data);
-
-        sceGuEnable(GU_BLEND);
-        // sceGuPixelMask(0xFF000000);
-        sceGuBlendFunc(GU_ADD, GU_SRC_ALPHA, GU_ONE_MINUS_SRC_ALPHA, 0, 0);
-
-        drawFullscreenTexture(0xF0FFFFFF, smile_data_width, smile_data_height);
+        // Reset the pixel mask and disable blending
         sceGuPixelMask(0);
         sceGuDisable(GU_BLEND);
 
@@ -169,10 +169,12 @@ int main(int argc, char *argv[])
         // HUD text
         pspDebugScreenSetOffset((int)fbp0);
         pspDebugScreenSetXY(0, 0);
-        pspDebugScreenPrintf("PixelMask + Blend demo (ABGR_8888)");
+        // pspDebugScreenPrintf("PixelMask + Blend demo (ABGR_8888)");
         // pspDebugScreenPrintf("Background: green (A=0)\n");
         // pspDebugScreenPrintf("Alpha slices: 0x00,0x33,0x66,0x99,0xCC,0xFF left->right\n");
 
+
+        printf("First pixel of target texture: 0x%08X\n", *(uint32_t*)(sceGeEdramGetAddr() + (int)targetTexture));
         sceDisplayWaitVblankStart();
         fbp0 = sceGuSwapBuffers();
     }
